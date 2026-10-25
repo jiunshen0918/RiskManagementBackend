@@ -9,6 +9,9 @@
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
     <InterpreterPath>$(ProjectHome)\.venv\Scripts\python.exe</InterpreterPath>
+    <TestFramework>unittest</TestFramework>
+    <UnitTestRootDirectory>tests</UnitTestRootDirectory>
+    <UnitTestPattern>test_*.py</UnitTestPattern>
     <OutputPath>.</OutputPath>
     <Name>RiskManagementBackend</Name>
     <RootNamespace>RiskManagementBackend</RootNamespace>
@@ -35,10 +38,13 @@
     <Compile Include="schemas\__init__.py" />
     <Compile Include="schemas\ai.py" />
     <Compile Include="schemas\risks.py" />
+    <Compile Include="tests\__init__.py" />
+    <Compile Include="tests\test_workflows.py" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="routers\" />
     <Folder Include="schemas\" />
+    <Folder Include="tests\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in
