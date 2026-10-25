@@ -8,12 +8,13 @@ from urllib.error import HTTPError, URLError
 from urllib.parse import urlencode
 from urllib.request import Request, urlopen
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, Depends, HTTPException
 
 from database import get_db_connection
+from security import require_api_user
 
 logger = logging.getLogger("uvicorn.error")
-router = APIRouter(prefix="/api/v1/servicenow", tags=["ServiceNow IRM"])
+router = APIRouter(prefix="/api/v1/servicenow", tags=["ServiceNow IRM"], dependencies=[Depends(require_api_user)])
 TIMEOUT_SECONDS = 20
 _cached_token: str | None = None
 _token_expires_at = 0.0

@@ -1,11 +1,13 @@
 from logging import getLogger
 
-from fastapi import FastAPI, HTTPException
+from fastapi import Depends, FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
 from database import get_db_connection
 from routers.ai import router as ai_router
 from routers.servicenow import router as servicenow_router
+from routers.risks import router as risks_router
+from security import require_api_user
 
 logger = getLogger("uvicorn.error")
 
@@ -17,6 +19,7 @@ app = FastAPI(
 
 app.include_router(ai_router)
 app.include_router(servicenow_router)
+app.include_router(risks_router)
 
 # Vite normally uses port 5173. This project currently uses port 60190.
 allowed_origins = [
@@ -30,8 +33,8 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=allowed_origins,
     allow_credentials=False,
-    allow_methods=["GET", "POST"],
-    allow_headers=["Content-Type"],
+    allow_methods=["GET", "POST", "PUT"],
+    allow_headers=["Authorization", "Content-Type"],
 )
 
 
@@ -47,7 +50,7 @@ def health_check() -> dict[str, str]:
     return {"status": "ok"}
 
 
-@app.get("/api/health/database")
+@app.get("/api/health/database", dependencies=[Depends(require_api_user)])
 def database_health_check() -> dict[str, str]:
     """Check PostgreSQL without returning connection details or credentials."""
     connection = None
@@ -65,3 +68,9 @@ def database_health_check() -> dict[str, str]:
     finally:
         if connection is not None:
             connection.close()
+
+
+@app.get("/api/v1/auth/check", dependencies=[Depends(require_api_user)])
+def auth_check() -> dict[str, bool]:
+    """Confirm the supplied API credentials are valid."""
+    return {"authenticated": True}

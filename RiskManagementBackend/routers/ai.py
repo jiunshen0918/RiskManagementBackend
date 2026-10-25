@@ -5,15 +5,16 @@ import socket
 from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, Depends, HTTPException
 from pydantic import ValidationError
 
 from ai_prompts import SYSTEM_PROMPT
 from risk_scoring import calculate_risk_assessment
 from schemas.ai import AIAnalysis, RiskAnalysisRequest, RiskAnalysisResponse
+from security import require_api_user
 
 logger = logging.getLogger("uvicorn.error")
-router = APIRouter(prefix="/api/v1/ai", tags=["AI Risk Analysis"])
+router = APIRouter(prefix="/api/v1/ai", tags=["AI Risk Analysis"], dependencies=[Depends(require_api_user)])
 OLLAMA_TIMEOUT_SECONDS = 120
 
 

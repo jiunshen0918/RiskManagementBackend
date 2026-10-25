@@ -24,14 +24,17 @@
   <ItemGroup>
     <Compile Include="database.py" />
     <Compile Include="main.py" />
+    <Compile Include="security.py" />
     <Compile Include="ai_prompts.py" />
     <Compile Include="risk_scoring.py" />
     <Compile Include="run_api.py" />
     <Compile Include="routers\__init__.py" />
     <Compile Include="routers\ai.py" />
     <Compile Include="routers\servicenow.py" />
+    <Compile Include="routers\risks.py" />
     <Compile Include="schemas\__init__.py" />
     <Compile Include="schemas\ai.py" />
+    <Compile Include="schemas\risks.py" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="routers\" />
